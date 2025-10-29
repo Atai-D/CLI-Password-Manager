@@ -1,10 +1,12 @@
 import argparse
 import json
 
+# * If the service already exists, ask user to confirm overwriting.
+
 parser = argparse.ArgumentParser()
 parser.add_argument("command")
-parser.add_argument("service")
-parser.add_argument("--password", required=False)
+parser.add_argument("--s", required=False)
+parser.add_argument("--p", required=False)
 args = parser.parse_args()
 
 
@@ -51,7 +53,17 @@ def create_password(service, password):
 
 def get_password(service):
     (_file, dic) = get_dic()
-    return dic[service]
+    try:
+        password = dic[service]
+        return password
+    except:
+        return "DOES NOT EXIST"
+
+
+def list_services():
+    (_file, dic) = get_dic()
+    for key in dic:
+        print(key)
 
 
 match args.command:
@@ -59,3 +71,5 @@ match args.command:
         print(create_password(args.service, args.password))
     case "get":
         print(get_password(args.service))
+    case "list":
+        list_services()
